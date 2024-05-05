@@ -20,6 +20,12 @@ public class Anomaloscope : MonoBehaviour
 
     public List<ColorData> colorList;
 
+    private void Start()
+    {
+        SetColorLerp();
+        SetBrightnessLerp();
+    }
+
     public void SetColorLerp()
     {
         colorLerp.SetFloat("_Percentile", colorLerpSlider.value);
