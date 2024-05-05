@@ -53,9 +53,9 @@ Shader "Unlit/BrightnessAdjusted"
             float4 Daltonize( float4 input)
             {
 	            // RGB to LMS matrix conversion
-	            float3 L = (17.8824f * input.r) + (43.5161f * input.g) + (4.11935f * input.b);
-	            float3 M = (3.45565f * input.r) + (27.1554f * input.g) + (3.86714f * input.b);
-	            float3 S = (0.0299566f * input.r) + (0.184309f * input.g) + (1.46709f * input.b);
+	            float L = (17.8824f * input.r) + (43.5161f * input.g) + (4.11935f * input.b);
+	            float M = (3.45565f * input.r) + (27.1554f * input.g) + (3.86714f * input.b);
+	            float S = (0.0299566f * input.r) + (0.184309f * input.g) + (1.46709f * input.b);
     
                 float l;
                 float m;

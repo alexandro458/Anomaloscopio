@@ -30,7 +30,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Percentile: 0
+    - _Percentile: 0.37985423
     - _isLerp: 1
     m_Colors:
     - _Color1: {r: 0.41960785, g: 0.6039216, b: 0.36078432, a: 1}
