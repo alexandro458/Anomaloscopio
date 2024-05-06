@@ -19,9 +19,9 @@ float4 LMStoRGB(float3 lms) {
     return mul(lmsToRgb, float4(lms.xyz, 1.0));
 }
 
-float3 lmsColorToProtanopia(float3 lms) {
+float3 lmsColorToProtanopia(float3 lms) {  // Matriz de protanopia
     float4x4 protanopia = float4x4(
-        0, 2.02344, -2.52581, 0,
+        0, 2.02344, -2.52581, 0,  // Aumentar la contribución del verde y azul al rojo
         0, 1, 0, 0,
         0, 0, 1, 0,
         0, 0, 0, 1
@@ -29,31 +29,21 @@ float3 lmsColorToProtanopia(float3 lms) {
     return mul(protanopia, float4(lms.xyz, 1.0));
 }
 
-float3 lmsColorToDeutanopia(float3 lms) {
+float3 lmsColorToDeutanopia(float3 lms) { // Matriz de Deutanopia
     float4x4 deuteranopia = float4x4(
         1, 0, 0, 0,
-        0.4942, 0, 1.2483, 0,
+        0.4942, 0, 1.2483, 0, // Aumentar la contribución del rojo y azul al verde
         0, 0, 1, 0,
         0, 0, 0, 1
     );
     return mul(deuteranopia, float4(lms.xyz, 1.0));
 }
 
-float3 lmsColorToTritanopia(float3 lms) {
-    float4x4 tritanopia = float4x4(
-       1, 0, 0, 0,
-      0, 1, 0, 0,
-      -0.3959, 0.8011, 0, 0,
-      0, 0, 0, 1
-    );
-    return mul(tritanopia, float4(lms.xyz, 1.0));
-}
-
-float3 rgbColorToTritanopia(float3 rgb) {
+float3 rgbColorToTritanopia(float3 rgb) { // Matriz de Tritanopia
     float4x4 tritanopia = float4x4(
         1, 0, 0, 0,   
         0, 1, 0, 0,   
-        0.2, 0.2, 0.6, 0,
+        0.2, 0.2, 0.6, 0, // Aumentar la contribución del verde y rojo al azul
         0, 0, 0, 1
     );
     return mul(tritanopia, float4(rgb.xyz, 1.0));
@@ -85,3 +75,14 @@ float4 DaltonizeV2(float4 col, int type, float degree)
     return finalColor;
     
 }
+
+
+//float3 lmsColorToTritanopia(float3 lms) {
+//    float4x4 tritanopia = float4x4(
+//       1, 0, 0, 0,
+//      0, 1, 0, 0,
+//      -0.3959, 0.8011, 0, 0,
+//      0, 0, 0, 1
+//    );
+//    return mul(tritanopia, float4(lms.xyz, 1.0));
+//}

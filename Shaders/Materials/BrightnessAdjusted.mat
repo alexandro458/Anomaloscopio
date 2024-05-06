@@ -30,7 +30,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _BlindDegree: 1
-    - _Percentile: 0.106
+    - _Percentile: -0.368
     - _isLerp: 0
     m_Colors:
     - _Color1: {r: 0.94509804, g: 0.74509805, b: 0.39607844, a: 0}
