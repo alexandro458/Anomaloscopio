@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 [ExecuteInEditMode]
 public class Anomaloscope : MonoBehaviour
@@ -13,6 +14,8 @@ public class Anomaloscope : MonoBehaviour
 
     public Slider colorLerpSlider;
     public Slider brightnessLerpSlider;
+    public Slider BlindDegreeSlider;
+    public TMP_Text blindDegree;
 
     public bool hideReference = false;
 
@@ -24,6 +27,7 @@ public class Anomaloscope : MonoBehaviour
     {
         SetColorLerp();
         SetBrightnessLerp();
+        SetBlindDegree();
     }
 
     public void SetColorLerp()
@@ -36,6 +40,13 @@ public class Anomaloscope : MonoBehaviour
     {
         brightnessLerp.SetFloat("_Percentile", brightnessLerpSlider.value);
         brightnessAdjusted.SetFloat("_Percentile", brightnessLerpSlider.value);
+    }
+
+    public void SetBlindDegree()
+    {
+        lerpAdjusted.SetFloat("_BlindDegree", BlindDegreeSlider.value);
+        brightnessAdjusted.SetFloat("_BlindDegree", BlindDegreeSlider.value);
+        blindDegree.text = BlindDegreeSlider.value.ToString("F1");
     }
 
     private void Update()

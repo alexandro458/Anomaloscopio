@@ -7,6 +7,7 @@ Shader "Unlit/BrightnessAdjusted"
         _Color1 ("Color1 ", Color) = (0,0,0,0)
         _Color2 ("Color2 ", Color) = (0,0,0,0)
         _Percentile("Percentile", Float) = 1
+        _BlindDegree ("Blind Degree", Range(0, 1)) = 1
     }
     SubShader
     {
@@ -39,6 +40,7 @@ Shader "Unlit/BrightnessAdjusted"
             float4 _Color2;
 
             float _Percentile;
+            float _BlindDegree;
 
             int _Type;
             float _isLerp;
@@ -60,7 +62,7 @@ Shader "Unlit/BrightnessAdjusted"
 
                 if (_Type == -1) { clip(-1); }
 
-                return DaltonizeV2(col, _Type);
+                return DaltonizeV2(col, _Type, _BlindDegree);
             }
             ENDCG
         }
