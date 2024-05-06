@@ -1,89 +1,84 @@
-float4 Daltonize(float4 lms, int type)
-            {
-	            // RGB to LMS matrix conversion
-	            float L = lms.x;
-	            float M = lms.y;
-	            float S = lms.z;
-    
-                float l;
-                float m;
-                float s;
 
-	            // Simulate color blindness
-    
-	            if (type == 0){ // Protanope - reds are greatly reduced (1% men)
-		            l = 0.0f * L + 2.02344f * M + -2.52581f * S;
-		            m = 0.0f * L + 1.0f * M + 0.0f * S;
-		            s = 0.0f * L + 0.0f * M + 1.0f * S;
-	            }
-    
-	            if (type == 1){ // Deuteranope - greens are greatly reduced (1% men)
-		            l = 1.0f * L + 0.0f * M + 0.0f * S;
-		            m = 0.494207f * L + 0.0f * M + 1.24827f * S;
-		            s = 0.0f * L + 0.0f * M + 1.0f * S;
-	            }
-    
-	           if (type == 2){ // Tritanope - blues are greatly reduced (0.003% population)
-		            l = 1.0f * L + 0.0f * M + 0.0f * S;
-		            m = 0.0f * L + 1.0f * M + 0.0f * S;
-		            s = -0.395913f * L + 0.801109f * M + 0.0f * S;
-	            }
-    
-	            float4 error;
-	            error.r = (0.0809444479f * l) + (-0.130504409f * m) + (0.116721066f * s);
-	            error.g = (-0.0102485335f * l) + (0.0540193266f * m) + (-0.113614708f * s);
-	            error.b = (-0.000365296938f * l) + (-0.00412161469f * m) + (0.693511405f * s);
-	            error.a = 1;
-
-	            return error.rgba;
-            }
-
-float4 LMSconvert(float4 input)
-{
-				float L = (17.8824f * input.r) + (43.5161f * input.g) + (4.11935f * input.b);
-	            float M = (3.45565f * input.r) + (27.1554f * input.g) + (3.86714f * input.b);
-	            float S = (0.0299566f * input.r) + (0.184309f * input.g) + (1.46709f * input.b);
-
-				return float4(L,M,S, 1.0);
+float4 RGBtoLMS(float3 rgb) {
+                float4x4 rgbToLms = float4x4(
+                    17.8824, 43.5161, 4.1193, 0,
+                    3.4557, 27.1554, 3.8671, 0,
+                    0.02996, 0.18431, 1.4700, 0,
+                    0, 0, 0, 1
+                );
+                return mul(rgbToLms, float4(rgb.xyz, 1.0));
 }
 
-float3 RGBtoLMS(float3 rgb) {
-                float3x3 rgbToLms = float3x3(
-                    31.3989492, 63.95129383, 4.64975462,
-                    15.53714069, 75.78944616, 8.67014186,
-                    1.77515606, 10.94420944, 87.25692246
+float4 LMStoRGB(float3 lms) {
+                float4x4 lmsToRgb = float4x4(
+                      0.0809, -0.1305, 0.1167, 0,
+                      -0.0102, 0.0540, -0.1136, 0,
+                      -0.0003, -0.0041, 0.6932, 0,
+                      0, 0, 0, 1
                 );
-                return mul(rgbToLms, rgb);
+                return mul(lmsToRgb, float4(lms.xyz, 1.0));
 }
 
-float3 LMStoRGB(float3 lms) {
-                float3x3 lmsToRgb = float3x3(
-                    0.0547, -0.0464, 0.0017,
-                    -0.0112, 0.0229, -0.0017,
-                    0.0002, -0.0019, 0.0116
-                );
-                return mul(lmsToRgb, lms);
+float3 lmsColorToProtanopia(float3 lms) {
+    float4x4 protanopia = float4x4(
+        0, 2.02344, -2.52581, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    );
+    return mul(protanopia, float4(lms.xyz, 1.0));
+}
+
+float3 lmsColorToDeutanopia(float3 lms) {
+    float4x4 deuteranopia = float4x4(
+        1, 0, 0, 0,
+        0.4942, 0, 1.2483, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    );
+    return mul(deuteranopia, float4(lms.xyz, 1.0));
 }
 
 float3 lmsColorToTritanopia(float3 lms) {
+    float4x4 tritanopia = float4x4(
+       1, 0, 0, 0,
+      0, 1, 0, 0,
+      -0.3959, 0.8011, 0, 0,
+      0, 0, 0, 1
+    );
+    return mul(tritanopia, float4(lms.xyz, 1.0));
+}
 
-                float4 e = float4(65.5178, 34.4782, 1.68427, 1); //RGB white in LMS space
-                float l = lms.x;
-                float m = lms.y;
-                float s = lms.z;
+float3 rgbColorToTritanopia(float3 rgb) {
+    float4x4 tritanopia = float4x4(
+        1, 0, 0, 0,   
+        0, 1, 0, 0,   
+        0.2, 0.2, 0.6, 0,
+        0, 0, 0, 1
+    );
+    return mul(tritanopia, float4(rgb.xyz, 1.0));
+}
 
-                // Determine the anchor
-                float2 anchor = (m / l) < (e.y / e.x)
-                    ? float2(0.0930085, 0.00730255) // 660nm
-                    : float2(0.163952, 0.268063); // 485nm
+float4 DaltonizeV2(float4 col, int type)
+{
+    float4 lmsCol = RGBtoLMS(col.rgb);
+    if(type == 0) // Protanope - reds are greatly reduced (1% men)
+    {
+        lmsCol.xyz = lmsColorToProtanopia(lmsCol);
+    }
 
-                // Coefficients for the line equation
-                float a = (e.y * anchor.y) - (e.z * anchor.x);
-                float b = (e.z * anchor.x) - (e.x * anchor.y);
-                float c = (e.x * anchor.y) - (e.y * anchor.x);
+    if(type == 1) // Deuteranope - greens are greatly reduced (1% men)
+    {
+        lmsCol.xyz = lmsColorToDeutanopia(lmsCol);
+    }
 
-                // Compute the new S value
-                float newS = -((a * l) + (b * m)) / c;
+    if(type == 2) // Tritanope - blues are greatly reduced (0.003% population)
+    {
+        return float4(rgbColorToTritanopia(col.xyz).xyz, 1.0);
+    }
 
-                return float3(l, m, newS);
+    lmsCol = LMStoRGB(lmsCol.xyz);
+
+    return float4(lmsCol.xyz, 1.0);
+    
 }

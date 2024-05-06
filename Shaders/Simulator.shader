@@ -55,17 +55,12 @@ Shader "Unlit/BrightnessAdjusted"
             {
                 float4 col;
 
-                float4 fixedColor1 = LMSconvert(_Color1);
-                float4 fixedColor2 = LMSconvert(_Color2);
-
                 if(_isLerp == 0) col = _Color1 * (1.0 + _Percentile);
                 if(_isLerp == 1) col = lerp(_Color1, _Color2, _Percentile);
 
                 if (_Type == -1) { clip(-1); }
 
-                col = Daltonize(LMSconvert(col), _Type); 
-
-                return col;
+                return DaltonizeV2(col, _Type);
             }
             ENDCG
         }
