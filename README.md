@@ -20,14 +20,6 @@ The simulation is built using Unity, leveraging its powerful rendering capabilit
 
 To try the simulation, please visit the [Anomaloscope Prototype on Itch.io](https://alexandro458.itch.io/prototipo-anomaloscopio). The simulation is web-based and accessible through any modern browser, allowing for easy access and widespread use.
 
-## Objective
-
-The primary objective of this project is to provide an educational tool that helps both individuals and healthcare professionals better understand and diagnose color vision deficiencies. By simulating real-world scenarios and providing a controlled environment to test color perception, this anomaloscope serves as a valuable resource in the field of ophthalmology and visual sciences.
-
-## Conclusion
-
-Thank you for visiting this repository. Please feel free to explore the code, try out the simulation, and contribute to further development. Your feedback and contributions are highly appreciated and will help improve the effectiveness of this educational tool.
-
 ---
 
 For more information, suggestions, or contributions, please contact me through GitHub or the project page on Itch.io.
